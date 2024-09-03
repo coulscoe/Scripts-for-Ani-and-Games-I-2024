@@ -1,2 +1,28 @@
+//created truck body
 polyCube -width 8 -height 2 -depth 4 -subdivisionsX 1 -subdivisionsY 1 -subdivisionsZ 1 -axis 0 1 0 -createUVs 4 -constructionHistory 1;
-move -r 0 2.5 0 ;
+move -relative 0 2.5 0 ;
+//creates wheels
+// creates front right wheel    
+polyCylinder -radius 1 -height 1 -subdivisionsX 20 -subdivisionsY 1 -subdivisionsZ 1 -axis 0 1 0 -roundCap 0 -createUVs 3 -constructionHistory 1;
+rotate -relative -objectSpace -forceOrderXYZ 90 0 0 ;
+move -relative -3 0 0 ;
+move -r 0 1 0 ;
+move -r 0 0 -2;
+//creates front left wheel
+polyCylinder -radius 1 -height 1 -subdivisionsX 20 -subdivisionsY 1 -subdivisionsZ 1 -axis 0 1 0 -roundCap 0 -createUVs 3 -constructionHistory 1;
+rotate -relative -objectSpace -forceOrderXYZ 90 0 0 ;
+move -relative -3 0 0 ;
+move -r 0 1 0 ;
+move -r 0 0 2;
+//creates back right wheel
+polyCylinder -radius 1 -height 1 -subdivisionsX 20 -subdivisionsY 1 -subdivisionsZ 1 -axis 0 1 0 -roundCap 0 -createUVs 3 -constructionHistory 1;
+rotate -relative -objectSpace -forceOrderXYZ 90 0 0 ;
+move -relative 3 0 0 ;
+move -r 0 1 0 ;
+move -r 0 0 2;
+//creates back left wheel
+polyCylinder -radius 1 -height 1 -subdivisionsX 20 -subdivisionsY 1 -subdivisionsZ 1 -axis 0 1 0 -roundCap 0 -createUVs 3 -constructionHistory 1;
+rotate -relative -objectSpace -forceOrderXYZ 90 0 0 ;
+move -relative 3 0 0 ;
+move -r 0 1 0 ;
+move -r 0 0 -2;
