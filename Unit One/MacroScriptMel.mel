@@ -1,0 +1,2 @@
+polyCube -width 8 -height 2 -depth 4 -subdivisionsX 1 -subdivisionsY 1 -subdivisionsZ 1 -axis 0 1 0 -createUVs 4 -constructionHistory 1;
+move -r 0 2.5 0 ;
