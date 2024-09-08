@@ -1,0 +1,9 @@
+int $number;
+
+string $name;
+
+float $price;
+//bool
+int $grade;
+
+float $position[];
