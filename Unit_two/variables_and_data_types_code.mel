@@ -7,3 +7,6 @@ float $price;
 int $grade;
 
 float $position[];
+
+//getting the return of an object, name and object name, by surrounding the object with `` and putting it into a temp variable, make sure that the `` does not include ; 
+//write on paper to understand the problem and how to tackle it.
