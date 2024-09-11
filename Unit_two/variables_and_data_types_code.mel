@@ -1,12 +1,12 @@
-int $number;
-
-string $name;
-
-float $price;
-//bool
-int $grade;
-
-float $position[];
 
 //getting the return of an object, name and object name, by surrounding the object with `` and putting it into a temp variable, make sure that the `` does not include ; 
 //write on paper to understand the problem and how to tackle it.
+string $object[];
+$object = `polySphere -r 1 -sx 20 -sy 20 -ax 0 1 0 -cuv 2 -ch 1`;
+
+move -relative 1 6.6 -6 $object[0];
+// use object operation then -q or -query to access information
+float $radius= `polySphere -q -radius $object[0]`;
+print ($radius);
+
+polySphere -e -radius ($radius- 2.3) $object[0];
