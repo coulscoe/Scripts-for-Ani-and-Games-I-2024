@@ -1,13 +1,14 @@
 string $name[];
+int $size=15;
 //creates cone
-$name= `polyCone -r 1 -h 3 -sx 20 -sy 1 -sz 0 -ax 0 1 0 -rcp 0 -cuv 3 -ch 1`;
+$name= `polyCone -r $size -h ($size*3) -sx 20 -sy 1 -sz 0 -ax 0 1 0 -rcp 0 -cuv 3 -ch 1`;
 rotate -r -os -fo 180 0 0 $name[0];
-move -r 0 1.5 0 $name[0];
+move -r 0 ($size*1.5) 0 $name[0];
 //cone top
-$name= `polyCylinder -r 1.2 -h .7 -sx 20 -sy 1 -sz 1 -ax 0 1 0 -rcp 0 -cuv 3 -ch 1`;
-move -r 0 3.3 0 $name[0];
+$name= `polyCylinder -r ($size*1.2) -h ($size *.7)  -sx 20 -sy 1 -sz 1 -ax 0 1 0 -rcp 0 -cuv 3 -ch 1`;
+move -r 0 ($size*3.3) 0 $name[0];
 // creates Icecream
-$name= `polySphere -r 1.1 -sx 20 -sy 20 -ax 0 1 0 -cuv 2 -ch 1`;
-move -r 0 3.8 0 $name[0];
-$name= `polySphere -r .9 -sx 20 -sy 20 -ax 0 1 0 -cuv 2 -ch 1`;
-move -r .3 5 0 $name[0];
+$name= `polySphere -r ($size*1.1) -sx 20 -sy 20 -ax 0 1 0 -cuv 2 -ch 1`;
+move -r 0 ($size*3.8) 0 $name[0];
+$name= `polySphere -r ($size*.9) -sx 20 -sy 20 -ax 0 1 0 -cuv 2 -ch 1`;
+move -r .3 ($size*5) 0 $name[0];
