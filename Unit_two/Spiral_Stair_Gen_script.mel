@@ -1,0 +1,16 @@
+//defined function for creating a spiral staircase
+proc StairGen(int $stairNum, int $width, float $height, int $depth)
+{
+    //creates first step
+    string $object[];
+    string $temp[];
+    $object = `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
+    move -relative 0 ($height/2) 0 $object[0];
+    //creates stairs
+    for ($i=0;$i<$stairNum-1;$i++)
+    {
+        $object= `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
+        move -relative 0 ($height*1.5) ($depth*-1) $object[0];
+    }
+}  
+StairGen(2,4,1,2);  
