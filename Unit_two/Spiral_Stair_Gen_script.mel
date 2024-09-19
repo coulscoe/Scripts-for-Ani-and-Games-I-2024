@@ -4,27 +4,26 @@ proc StairGen(int $stairNum, int $width, float $height, int $depth, float $stepH
     //creates first step
     string $object[];
     float $objPos[];
-    int $objAngle[];
+    float $objAngle[];
     $object = `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
     //moves above grid
     move -relative 0 ($height/2) 0 $object[0];
     //gets objects origin
     $objPos = `xform -q -t -ws $object`;
     //sets rotate pivot
-    xform -rp $rotateOrigin 0 0 $object;
+    xform -rp $rotateOrigin .5 -1 $object;
     
     //creates stairs
-    for ($i=0;$i<$stairNum-1;$i++)
+    for ($i=1;$i<$stairNum;$i++)
     {
         $object= `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
         //moves stair based on previous step
-        move -relative $objPos[0] ($stepHeight+$objPos[1]) ($objPos[2]+$depth*-1) $object[0];
+        move -relative ($objPos[0]+$width/5+.3) ($stepHeight+$objPos[1]) ($objPos[2]-.2) $object[0];
         //moves the rotate pivot and gets the cords of the stair
         $objPos = `xform -q -t -ws $object`;
-        xform -rp $rotateOrigin 0 0 $object;
+        xform -rp $rotateOrigin .5 -1 $object;
         //rotates object
-        rotate -relative -os -fo 0 $stairRotation 0 $object;
-        $objAngle= `xform -q -ra $object`;
+        xform -ro 0 ($stairRotation*$i) 0 $object;
     }
 }  
-StairGen(10,4,1,2,1,2,-15);
+StairGen(5,4,1,2,1,5,-30);
