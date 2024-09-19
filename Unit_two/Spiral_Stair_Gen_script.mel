@@ -1,16 +1,30 @@
 //defined function for creating a spiral staircase
-proc StairGen(int $stairNum, int $width, float $height, int $depth)
+proc StairGen(int $stairNum, int $width, float $height, int $depth, float $stepHeight, float $rotateOrigin, int $stairRotation)
 {
     //creates first step
     string $object[];
-    string $temp[];
+    float $objPos[];
+    int $objAngle[];
     $object = `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
+    //moves above grid
     move -relative 0 ($height/2) 0 $object[0];
+    //gets objects origin
+    $objPos = `xform -q -t -ws $object`;
+    //sets rotate pivot
+    xform -rp $rotateOrigin 0 0 $object;
+    
     //creates stairs
     for ($i=0;$i<$stairNum-1;$i++)
     {
         $object= `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
-        move -relative 0 ($height*1.5) ($depth*-1) $object[0];
+        //moves stair based on previous step
+        move -relative $objPos[0] ($stepHeight+$objPos[1]) ($objPos[2]+$depth*-1) $object[0];
+        //moves the rotate pivot and gets the cords of the stair
+        $objPos = `xform -q -t -ws $object`;
+        xform -rp $rotateOrigin 0 0 $object;
+        //rotates object
+        rotate -relative -os -fo 0 $stairRotation 0 $object;
+        $objAngle= `xform -q -ra $object`;
     }
 }  
-StairGen(2,4,1,2);  
+StairGen(10,4,1,2,1,2,-15);
