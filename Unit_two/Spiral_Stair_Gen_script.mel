@@ -1,29 +1,23 @@
 //defined function for creating a spiral staircase
-proc StairGen(int $stairNum, int $width, float $height, int $depth, float $stepHeight, float $rotateOrigin, int $stairRotation)
+proc StairGen(int $stairNum, float $width, float $height, float $depth, float $stepHeight, float $rotatePivotXPos, int $stairRotation)
 {
-    //creates first step
     string $object[];
     float $objPos[];
     float $objAngle[];
-    $object = `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
-    //moves above grid
-    move -relative 0 ($height/2) 0 $object[0];
-    //gets objects origin
-    $objPos = `xform -q -t -ws $object`;
-    //sets rotate pivot
-    xform -rp $rotateOrigin .5 -1 $object;
-    
     //creates stairs
-    for ($i=1;$i<$stairNum;$i++)
+    for ($i=0;$i<$stairNum;$i++)
     {
+        //creates step
         $object= `polyCube -w $width -h $height -d $depth -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1`;
-        //moves stair based on previous step
-        move -relative ($objPos[0]+$width/5+.3) ($stepHeight+$objPos[1]) ($objPos[2]-.2) $object[0];
-        //moves the rotate pivot and gets the cords of the stair
+        //gets postion of object 
         $objPos = `xform -q -t -ws $object`;
-        xform -rp $rotateOrigin .5 -1 $object;
+        //moves pivot point
+        xform -rp $rotatePivotXPos .5 -1 $object;
         //rotates object
         xform -ro 0 ($stairRotation*$i) 0 $object;
-    }
+        //moves the stair relative to 
+        move -relative ($objPos[0]+$width/3) (.5+$objPos[1]+$i*($height+$stepHeight)) ($objPos[2]) $object[0];
+        
+    }   
 }  
-StairGen(5,4,1,2,1,5,-30);
+StairGen(40,4,1,2,0,10,-10);
