@@ -1,0 +1,9 @@
+for($i=O, size($input), $i++)
+{
+
+}
+$input[i]+$input[$i-1];
+
+//{} defines array
+//[] is index
+// if function has a output there needs to have the data type, and has to have return
