@@ -1,8 +1,56 @@
-for($i=O, size($input), $i++)
+//calculates sum of an array
+proc float Sum(float $input[])
 {
-
+    float $total=0;
+    for($i=0; $i<=size($input)-1; $i++)
+    {
+        $total+=$input[$i];
+    }
+    return $total;
 }
-$input[i]+$input[$i-1];
+print(Sum({2,4}));
+//calculates difference of an array
+proc float Difference (float $input[])
+{
+    float $total=0;
+    for($i=0; $i<=size($input)-1; $i++)
+    {
+        if ($i==0)
+        {
+            $total+=$input[$i];
+        }
+        else
+        {
+            $total-=$input[$i];
+        }
+    }
+    return $total;
+}
+print(Difference({2,4}));
+
+//multiples an array
+proc float Multiplication(float $input[])
+{
+    float $total=0;
+    for($i=0; $i<=size($input)-1; $i++)
+    {
+        if ($i==0)
+        {
+            $total+=$input[$i];
+        }
+        else
+        {
+            $total*=$input[$i];
+        }
+    }
+    return $total;
+}
+print(Multiplication({2,4}));
+// for($i=O, size($input), $i++)
+// {
+
+// }
+// $input[i]+$input[$i-1];
 
 //{} defines array
 //[] is index
