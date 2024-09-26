@@ -46,6 +46,34 @@ proc float Multiplication(float $input[])
     return $total;
 }
 print(Multiplication({2,4}));
+
+//divides an array
+proc float Division (float $input[])
+{
+    float $total=0;
+    for($i=0; $i<=size($input)-1; $i++)
+    {
+        if ($i==0)
+        {
+            $total+=$input[$i];
+        }
+        else
+        {
+            $total/=$input[$i];
+        }
+    }
+    return $total;
+}
+print(Division({2,4}));
+
+//caculates the power of two numbers
+
+proc float Power(float $input[])
+{
+    $total= pow($input[0],$input[1]);
+    return $total;
+}
+print(Power({2,5}));
 // for($i=O, size($input), $i++)
 // {
 
