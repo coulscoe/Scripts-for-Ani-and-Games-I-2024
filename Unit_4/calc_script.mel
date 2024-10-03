@@ -136,6 +136,7 @@ global proc calculator(float $input[], string $operation)
     else if ($operation == "median")
     {
         $total=`median($input)`;
+        $sign=",";
     }
     else 
     {
@@ -144,10 +145,10 @@ global proc calculator(float $input[], string $operation)
     string $resultString;
     for ($i=0; $i<=size($input)-1; $i++)
     {
-        // if ($operation=="mean")
-        // {
-        //     $resultString += "(";
-        // }
+        if($operation == "median")
+        {
+            $input= `sort $input`;
+        }
         if ($i==size($input)-1)
         {
             $resultString += $input[$i];
@@ -162,10 +163,13 @@ global proc calculator(float $input[], string $operation)
         $resultString+="/"+ size($input)+"="+ $total;
 
     }
-    $resultString+="="+ $total;
+    else
+    {
+        $resultString+="="+ $total;
+    }
     print($resultString);
     // print($total);
 }
 
 //the power operation only takes two numbers
-print(calculator({2,4}, "mean"));
+print(calculator({9,3,12,66,3,8}, "sum"));
