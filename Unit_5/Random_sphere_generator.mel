@@ -12,9 +12,18 @@
     xform -worldSpace -translation $centerX $centerY $centerZ $loc[0];
     }
     CenterLoc();
+
+    int $xmin, int $xmax, int $ymin, int $ymax, int $zmin, int $zmax
 */ 
-proc ObjectDuplication(int $duplNum, int $xmin, int $ymin, int $zmin, int $xmax, int $ymax, int $zmax)
+proc ObjectDuplication(int $duplNum)
 {
     string $sels[] = `ls -sl`;
-
+    for($i=0; $i< $duplNum; $i++)
+    {
+        for($d=0; $d<size($sels); $d++)
+        {
+            duplicate $sels[$d];
+        }     
+    }
 }
+ObjectDuplication(3);
