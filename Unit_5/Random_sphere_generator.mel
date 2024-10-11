@@ -13,17 +13,24 @@
     }
     CenterLoc();
 
-    int $xmin, int $xmax, int $ymin, int $ymax, int $zmin, int $zmax
 */ 
-proc ObjectDuplication(int $duplNum)
+proc ObjectDuplication(int $duplNum, int $xmin, int $xmax, int $ymin, int $ymax, int $zmin, int $zmax)
 {
     string $sels[] = `ls -sl`;
+    string $name[];
+    float $randX;
+    float $randY;
+    float $randZ;
     for($i=0; $i< $duplNum; $i++)
     {
         for($d=0; $d<size($sels); $d++)
         {
-            duplicate $sels[$d];
+            $name= `duplicate $sels[$d]`;
+            $randX= `rand $xmin $xmax`;
+            $randY= `rand $ymin $ymax`;
+            $randZ= `rand $zmin $zmax`;
+            xform -t $randX $randY $randZ -ws $name[0];
         }     
     }
 }
-ObjectDuplication(3);
+ObjectDuplication(10,-5,5,-5,5,-5,5);
