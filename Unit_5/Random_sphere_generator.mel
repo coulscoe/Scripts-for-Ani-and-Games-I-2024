@@ -1,26 +1,31 @@
-/*proc CenterLoc()
-    {
-    string $sels[] = `ls -sl`;
-    float $bbox[] =`xform -q -boundingBox $sels`;
-
-    float $centerX = ($bbox[0] + $bbox[3])/2;
-    float $centerY = ($bbox[1] + $bbox[4])/2;
-    float $centerZ = ($bbox[2] + $bbox[5])/2;
-    
-    string $loc[] =`spaceLocator -p 0 0 0`;
-
-    xform -worldSpace -translation $centerX $centerY $centerZ $loc[0];
-    }
-    CenterLoc();
-
-*/ 
-proc ObjectDuplication(int $duplNum, int $xmin, int $xmax, int $ymin, int $ymax, int $zmin, int $zmax)
+//duplicates and moves randomly through specified box various objects selected 
+//int $duplNum, int $xmin, int $xmax, int $ymin, int $ymax, int $zmin, int $zmax
+global proc ObjectDuplication()
 {
+    //gets names of information put into a window
+    string $duplNumName= `optionVar -q "duplNum"`;
+    string $xminName= `optionVar -q "xmin"`;
+    string $xmaxName= `optionVar -q "xmax"`;
+    string $yminName= `optionVar -q "ymin"`;
+    string $ymaxName= `optionVar -q "ymax"`;
+    string $zminName= `optionVar -q "zmin"`;
+    string $zmaxName= `optionVar -q "zmax"`;
+
+    float $duplNum= `optionVar -q -value $duplNumName`;
+    float $xmin= `optionVar -q -value $xminName`;
+    float $xmax= `optionVar -q -value $xmaxName`;
+    float $ymin= `optionVar -q -value $yminName`;
+    float $ymax= `optionVar -q -value $ymaxName`;
+    float $zmin= `optionVar -q -value $zminName`;
+    float $zmax= `optionVar -q -value $zmaxName`;
+
+    //gets selectied objects and number values
     string $sels[] = `ls -sl`;
     string $name[];
     float $randX;
     float $randY;
     float $randZ;
+    //duplicates each item on the list for selected objects, moves them for the specified duplication num
     for($i=0; $i< $duplNum; $i++)
     {
         for($d=0; $d<size($sels); $d++)
@@ -33,4 +38,25 @@ proc ObjectDuplication(int $duplNum, int $xmin, int $xmax, int $ymin, int $ymax,
         }     
     }
 }
-ObjectDuplication(10,-5,5,-5,5,-5,5);
+//destroys window if its exsists and makes a new one
+string $mWindow = "gen_window";
+if (`window -exists $mWindow`)
+    deleteUI $mWindow;
+
+//specifies functionalities of the window
+$mWindow= `window -height 400 -title "Random Generator" -sizeable 1 -width 500 $mWindow`; 
+string $mColumn = `columnLayout -adjustableColumn 1 -parent $mWindow`;
+//saves variables that are imputed into the window
+optionVar -stringValue "duplNum" `floatField`;
+optionVar -stringValue "xmin" `floatField`;
+optionVar -stringValue "xmax" `floatField`;
+optionVar -stringValue "ymin" `floatField`;
+optionVar -stringValue "ymax" `floatField`;
+optionVar -stringValue "zmin" `floatField`;
+optionVar -stringValue "zmax" `floatField`;
+//displayes the window and activates a button for the function to start
+button -parent $mColumn -label "Duplicate Objects" -command ObjectDuplication;
+
+showWindow $mWindow;
+// ObjectDuplication(10,-5,5,-5,5,-5,5);
+// button -command runs a command
