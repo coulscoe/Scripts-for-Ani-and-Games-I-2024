@@ -1,24 +1,7 @@
 //duplicates and moves randomly through specified box various objects selected 
 //int $duplNum, int $xmin, int $xmax, int $ymin, int $ymax, int $zmin, int $zmax
-global proc ObjectDuplication()
+global proc ObjectDuplication(int $duplNum, float $xmin, float $xmax, float $ymin, float $ymax, float $zmin, float $zmax)
 {
-    //gets names of information put into a window
-    string $duplNumName= `optionVar -q "duplNum"`;
-    string $xminName= `optionVar -q "xmin"`;
-    string $xmaxName= `optionVar -q "xmax"`;
-    string $yminName= `optionVar -q "ymin"`;
-    string $ymaxName= `optionVar -q "ymax"`;
-    string $zminName= `optionVar -q "zmin"`;
-    string $zmaxName= `optionVar -q "zmax"`;
-
-    float $duplNum= `optionVar -q -value $duplNumName`;
-    float $xmin= `optionVar -q -value $xminName`;
-    float $xmax= `optionVar -q -value $xmaxName`;
-    float $ymin= `optionVar -q -value $yminName`;
-    float $ymax= `optionVar -q -value $ymaxName`;
-    float $zmin= `optionVar -q -value $zminName`;
-    float $zmax= `optionVar -q -value $zmaxName`;
-
     //gets selectied objects and number values
     string $sels[] = `ls -sl`;
     string $name[];
@@ -38,25 +21,58 @@ global proc ObjectDuplication()
         }     
     }
 }
-//destroys window if its exsists and makes a new one
-string $mWindow = "gen_window";
-if (`window -exists $mWindow`)
-    deleteUI $mWindow;
 
-//specifies functionalities of the window
-$mWindow= `window -height 400 -title "Random Generator" -sizeable 1 -width 500 $mWindow`; 
-string $mColumn = `columnLayout -adjustableColumn 1 -parent $mWindow`;
-//saves variables that are imputed into the window
-optionVar -stringValue "duplNum" `floatField`;
-optionVar -stringValue "xmin" `floatField`;
-optionVar -stringValue "xmax" `floatField`;
-optionVar -stringValue "ymin" `floatField`;
-optionVar -stringValue "ymax" `floatField`;
-optionVar -stringValue "zmin" `floatField`;
-optionVar -stringValue "zmax" `floatField`;
-//displayes the window and activates a button for the function to start
-button -parent $mColumn -label "Duplicate Objects" -command ObjectDuplication;
+global proc Gen_buttonCommand()
+{
+    //gets names of information put into a window
+    string $duplNumName= `optionVar -q "duplNum"`;
+    string $xminName= `optionVar -q "xmin"`;
+    string $xmaxName= `optionVar -q "xmax"`;
+    string $yminName= `optionVar -q "ymin"`;
+    string $ymaxName= `optionVar -q "ymax"`;
+    string $zminName= `optionVar -q "zmin"`;
+    string $zmaxName= `optionVar -q "zmax"`;
 
-showWindow $mWindow;
-// ObjectDuplication(10,-5,5,-5,5,-5,5);
-// button -command runs a command
+    //gets the value of the names saved earlier
+    int $duplNum= `intField -q -value $duplNumName`;
+    float $xmin= `floatField -q -value $xminName`;
+    float $xmax= `floatField -q -value $xmaxName`;
+    float $ymin= `floatField -q -value $yminName`;
+    float $ymax= `floatField -q -value $ymaxName`;
+    float $zmin= `floatField -q -value $zminName`;
+    float $zmax= `floatField -q -value $zmaxName`;
+
+    ObjectDuplication($duplNum, $xmin, $xmax, $ymin, $ymax, $zmin, $zmax);
+}
+
+global proc GenUI()
+{
+    //destroys window if its exsists and makes a new one
+    string $mWindow = "gen_window";
+    if (`window -exists $mWindow`)
+        deleteUI $mWindow;
+
+    //specifies functionalities of the window
+    $mWindow= `window -widthHeight 25 25 -resizeToFitChildren 0 -title "Random Generator" $mWindow`; 
+    string $mColumn = `columnLayout -adjustableColumn 1 -columnWidth 50`;
+    //saves variables that are imputed into the window
+    text -l "number of duplications";
+    optionVar -stringValue "duplNum" `intField -parent $mColumn`;
+    text -l "X cord min";
+    optionVar -stringValue "xmin" `floatField -parent $mColumn`;
+    text -l "X cord max";
+    optionVar -stringValue "xmax" `floatField -parent $mColumn`;
+    text -l "Y cord min";
+    optionVar -stringValue "ymin" `floatField -parent $mColumn`;
+    text -l "Y cord max";
+    optionVar -stringValue "ymax" `floatField -parent $mColumn`;
+    text -l "Z cord min";
+    optionVar -stringValue "zmin" `floatField -parent $mColumn`;
+    text -l "Z cord max";
+    optionVar -stringValue "zmax" `floatField -parent $mColumn`;
+    //displayes the window and activates a button for the function to start
+    button -parent $mColumn -label "Duplicate Objects" -command "Gen_buttonCommand";
+
+    showWindow $mWindow;
+}
+GenUI();
