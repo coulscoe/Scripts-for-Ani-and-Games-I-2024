@@ -172,4 +172,17 @@ global proc calculator(float $input[], string $operation)
 }
 
 //the power operation only takes two numbers
-print(calculator({9,3,12,66,3,8}, "sum"));
+global proc calcUI()
+{
+    //destroys window if its exsists and makes a new one
+    string $mWindow = "gen_window";
+    if (`window -exists $mWindow`)
+        deleteUI $mWindow;
+
+    //specifies functionalities of the window
+    $mWindow= `window -widthHeight 25 25 -resizeToFitChildren 0 -title "Random Generator" $mWindow`; 
+    string $mColumn = `columnLayout -adjustableColumn 1 -columnWidth 50`;
+    //saves variables that are imputed into the window
+    text -l "Imput array of numbers here";
+    
+}
