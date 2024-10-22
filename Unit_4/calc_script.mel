@@ -170,126 +170,40 @@ global proc calculator(float $input[], string $operation)
     print($resultString);
     print($total);
 }
-global string $mColumn;
-
-global proc calculatorUI() {
-    // Destroy the window if it exists
-    if (`window -exists calculatorWin`) {
-        deleteUI calculatorWin;
-    }
-
-    // Create a new window
-    window -title "Array Calculator" -widthHeight 300 400 calculatorWin;
-
-    // Create a column layout
-    columnLayout -adjustableColumn true;
-    $mColumn = `setParent -q`;
-
-    // Add initial floatFields
-    for ($i = 0; $i < 5; $i++) {
-        floatField -parent $mColumn -annotation ("Index " + $i);
-    }
-
-    // Button to add more fields
-    button -label "Add FloatField" -command "addFloatField";
-
-    // Dropdown menu for operation selection
-    optionMenu -label "Select Operation" operationMenu;
-    menuItem -label "Sum";
-    menuItem -label "Difference";
-    menuItem -label "Multiplication";
-    menuItem -label "Division";
-    menuItem -label "Power";
-    menuItem -label "Mean";
-    menuItem -label "Median";
-
-    // Button to calculate result
-    button -label "Calculate" -command "calculateResult";
-
-    // Text field to display result
-    textField -editable false -parent $mColumn resultField;
-
-    showWindow calculatorWin;
-}
-
-global proc addFloatField() {
-    global string $mColumn;
-    // Ensure the layout context is set correctly
-    setParent $mColumn;
-    // Create a new floatField in the existing column layout
-    floatField -parent $mColumn -annotation ("New Index");
-}
-
-global proc calculateResult() {
-    global string $mColumn;
-    string $children[] = `columnLayout -query -childArray $mColumn`;
-    float $arrayValues[];
-    string $operation = `optionMenu -query -value operationMenu`;
-
-    // Collect values from floatFields
-    for ($i = 0; $i < size($children); $i++) {
-        if (`floatField -exists $children[$i]`) {
-            float $value = `floatField -query -value $children[$i]`;
-            $arrayValues[$i] = $value;
-        }
-    }
-
-    // Perform the selected operation
-    float $result;
-    if ($operation == "Sum") {
-        $result = sum($arrayValues);
-    } else if ($operation == "Difference") {
-        $result = difference($arrayValues);
-    } else if ($operation == "Multiplication") {
-        $result = multiplication($arrayValues);
-    } else if ($operation == "Division") {
-        $result = division($arrayValues);
-    } else if ($operation == "Power") {
-        $result = power($arrayValues);
-    } else if ($operation == "Mean") {
-        $result = mean($arrayValues);
-    } else if ($operation == "Median") {
-        $result = median($arrayValues);
-    } else {
-        print("Input valid operation word.\n");
-        return;
-    }
-
-    // Display the result
-    textField -edit -text ("Result: " + $result) resultField;
-}
-
-// Run the UI
-calculatorUI();
 
 //the power operation only takes two numbers
-// global proc calcUI()
-// {
-//     int $numArray;
-//     string $numArrayName;
-//     //destroys window if its exsists and makes a new one
-//     string $mWindow = "gen_window";
-//     if (`window -exists $mWindow`)
-//         deleteUI $mWindow;
+global proc calcUI()
+{
+    int $numArray;
+    string $numArrayName;
+    //destroys window if its exsists and makes a new one
+    string $mWindow = "gen_window";
+    if (`window -exists $mWindow`)
+        deleteUI $mWindow;
 
-//     //specifies functionalities of the window
-//     $mWindow= `window -widthHeight 25 25 -resizeToFitChildren 0 -title "Calculator" $mWindow`; 
-//     string $mColumn = `columnLayout -adjustableColumn 1 -columnWidth 50`;
-//     //saves variables that are imputed into the window
-//     text -label "Input length of Array";
-//     optionVar -stringValue "numArray" `intField -parent $mColumn`;
-//     button -label "Array Update" -command "updateUI";
-//     showWindow $mWindow;
-// }
-// global proc updateUI()
-// {
-//     $numArrayName= `optionVar -q "numArray"`;
-//     $numArray= `intField -q -value $numArrayName`;
-//     for($i=0;$i>=$numArray;$i++)
-//     {
-//         optionVar -stringValue "numArray" + $i"" `intField -parent $mColumn`;
-//     }
-// }
+    //specifies functionalities of the window
+    $mWindow= `window -widthHeight 25 25 -resizeToFitChildren 0 -title "Calculator" $mWindow`; 
+    string $mColumn = `columnLayout -adjustableColumn 1 -columnWidth 50`;
+    //saves variables that are imputed into the window
+    text -l "Input Array";
+    optionVar -stringValue "numArray1" `intField -parent $mColumn`;
+    optionVar -stringValue "numArray2" `intField -parent $mColumn`;
+
+    button -label "Add IntField" -command "updateUI";
+    showWindow $mWindow;
+}
+global proc updateUI()
+{
+    global string $mColumn;
+    int $i=0;
+    $i++;
+    if($i=0)
+    {
+        optionVar -stringValue "numLength" `intField -parent $mColumn`;
+    }
+    optionVar -stringValue "fieldGrp" `intFieldGrp -parent `;
+}
+calcUI();
 // global string $mColumn;
 
 // global proc arrayInputUI() {
