@@ -99,7 +99,7 @@ global proc float median(float $input[])
 }
 
 // determineds the kind of operation from a word, to calculate total
-global proc calculator(float $input[], int $grpOpInt, int $grpOpInt2)
+global proc string calculator(float $input[], int $grpOpInt, int $grpOpInt2)
 {
     string $sign;
     float $total=0;
@@ -118,38 +118,41 @@ global proc calculator(float $input[], int $grpOpInt, int $grpOpInt2)
         $total=`multiplication($input)`;
         $sign="*";
     }
-    else if ($grpOpInt == 4)
+    else if ($grpOpInt2 == 1)
     {
         $total = `division($input)`;
         $sign="/";
     }
-    else if ($grpOpInt2 == 1)
+    else if ($grpOpInt2 == 2 && $grpOpInt == 4)
     {
         $total =`power($input)`;
         $sign="^";
     }
-    else if ($grpOpInt2 == 2)
+    else if ($grpOpInt2 == 3 && $grpOpInt == 4)
     {
         $total=`mean($input)`;
         $sign="+";
     }
-    else if ($grpOpInt2 == 3)
+    else if ($grpOpInt2 == 4 && $grpOpInt == 4)
     {
         $total=`median($input)`;
         $sign=",";
     }
     else 
     {
-        print("Input valid operation word.");
-        return;
+        return("Input valid operation word.");
     }
     string $resultString;
-    for ($i=0; $i<=size($input)-1; $i++)
+    for ($i=0; $i<size($input); $i++)
     {
-        if($grpOpInt2 == 3)
+        if($grpOpInt2 == 4 && $grpOpInt == 4)
         {
             $input= `sort $input`;
         }
+        if($grpOpInt2 == 2 && $grpOpInt == 4)
+        {
+            continue;
+        } 
         if ($i==size($input)-1)
         {
             $resultString += $input[$i];
@@ -159,7 +162,21 @@ global proc calculator(float $input[], int $grpOpInt, int $grpOpInt2)
             $resultString += $input[$i] + $sign;
         }
     }
-    if ($grpOpInt2== 2)
+    if($grpOpInt2 == 2 && $grpOpInt == 4)
+    {
+        for ($j=0; $j<2; $j++)
+        {
+            if ($j==1)
+            {
+                $resultString += $input[$j];
+            }
+            else
+            {
+                $resultString += $input[$j] + $sign;
+            }
+        }
+    }
+    if ($grpOpInt2== 3 && $grpOpInt == 4)
     {
         $resultString+="/"+ size($input)+"="+ $total;
 
@@ -168,7 +185,8 @@ global proc calculator(float $input[], int $grpOpInt, int $grpOpInt2)
     {
         $resultString+="="+ $total;
     }
-    print($resultString+"\n");
+    $resultString+="\n";
+    return($resultString);
 }
 global proc Calc_buttonCommand()
 {
@@ -182,10 +200,11 @@ global proc Calc_buttonCommand()
     string $arrayname6= `optionVar -q "numArray6"`;
     string $grpOp= `optionVar -q "grpOperation"`;
     string $grpOp2= `optionVar -q "grpOperation2"`;
+    string $resultText= `optionVar -q "textFieldLabel"`;
     
 
     //gets the value of the names saved earlier
-    int $intlen= `intField -q -value $intLengthName`;
+    int $intlen= `intSlider -q -value $intLengthName`;
     float $array1= `floatField -q -value $arrayname1`;
     float $array2= `floatField -q -value $arrayname2`;
     float $array3= `floatField -q -value $arrayname3`;
@@ -194,8 +213,6 @@ global proc Calc_buttonCommand()
     float $array6= `floatField -q -value $arrayname6`;
     int $grpOpInt= `radioButtonGrp -q -select $grpOp`;
     int $grpOpInt2= `radioButtonGrp -q -select $grpOp2`;
-    print($grpOpInt);
-    print($grpOpInt2);
     //puts number inputs into an array
     float $list[]={$array1,$array2,$array3,$array4,$array5,$array6};
     float $input[];
@@ -204,8 +221,10 @@ global proc Calc_buttonCommand()
     {
         $input[size($input)]=$list[$i];
     }
-    //calls function
-    calculator($input, $grpOpInt, $grpOpInt2);
+    //calls function and edits the textField
+
+    string $finalResult= calculator($input, $grpOpInt, $grpOpInt2);
+    textField -e -text $finalResult $resultText;
 }
 //the power operation only takes two numbers
 global proc calcUI()
@@ -219,8 +238,10 @@ global proc calcUI()
     $mWindow= `window -widthHeight 25 25 -resizeToFitChildren 0 -title "Calculator" $mWindow`; 
     string $mColumn = `columnLayout -adjustableColumn 1 -columnWidth 50`;
     //saves variables that are imputed into the window
-    text -l "Input Array and array length";
-    optionVar -stringValue "intLength" `intField -parent $mColumn`;
+    text -l "Input array length";
+    text -l "2                                                  3                                                   4                                                   5                                                   6";
+    optionVar -stringValue "intLength" `intSlider -maxValue 6 -minValue 2 -parent $mColumn`;
+    text -l "Input array (the power operation only takes two numbers no matter the array size)";
     optionVar -stringValue "numArray1" `floatField -parent $mColumn`;
     optionVar -stringValue "numArray2" `floatField -parent $mColumn`;
     optionVar -stringValue "numArray3" `floatField -parent $mColumn`;
@@ -229,9 +250,15 @@ global proc calcUI()
     optionVar -stringValue "numArray6" `floatField -parent $mColumn`;
     //seletion for operation
 
-    optionVar -stringValue "grpOperation" `radioButtonGrp -parent $mColumn -numberOfRadioButtons 4 -labelArray4 "sum" "difference" "multiplication" "division"`;
-    optionVar -stringValue "grpOperation2" `radioButtonGrp -parent $mColumn -numberOfRadioButtons 3 -labelArray3 "power" "mean" "median"`;
+    optionVar -stringValue "grpOperation" `radioButtonGrp -parent $mColumn -numberOfRadioButtons 4 -labelArray4 "sum" "difference" "multiplication" "other options below"`;
+    optionVar -stringValue "grpOperation2" `radioButtonGrp -parent $mColumn -numberOfRadioButtons 4 -labelArray4 "division" "power" "mean" "median"`;
     button -parent $mColumn -label "Calculate" -command "Calc_buttonCommand";
+    optionVar -stringValue "textFieldLabel" `textField -parent $mColumn -editable 0`;
     showWindow $mWindow;
 }
 calcUI();
+/*when using the file to maya, there is a slider to indicate the size of the array, 2 to 6,
+ where below you can imput those numbers, there is a radio button group for each operation
+ for division, power, mean and median. The option "other options below" must be selected 
+ otherwise it will just to the top operations. Clicking on the result will then print the 
+ string to the textField below the button.*/
