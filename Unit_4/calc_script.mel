@@ -99,41 +99,41 @@ global proc float median(float $input[])
 }
 
 // determineds the kind of operation from a word, to calculate total
-global proc calculator(float $input[], string $operation)
+global proc calculator(float $input[], int $grpOpInt, int $grpOpInt2)
 {
     string $sign;
     float $total=0;
-    if ($operation == "sum")
+    if ($grpOpInt == 1)
     {
         $total= `sum($input)`;
         $sign="+";
     }
-    else if ($operation == "difference")
+    else if ($grpOpInt == 2)
     {
         $total = `difference($input)`;
         $sign="-";
     }
-    else if ($operation == "multiplication")
+    else if ($grpOpInt == 3)
     {
         $total=`multiplication($input)`;
         $sign="*";
     }
-    else if ($operation == "division")
+    else if ($grpOpInt == 4)
     {
         $total = `division($input)`;
         $sign="/";
     }
-    else if ($operation == "power")
+    else if ($grpOpInt2 == 1)
     {
         $total =`power($input)`;
         $sign="^";
     }
-    else if ($operation == "mean")
+    else if ($grpOpInt2 == 2)
     {
         $total=`mean($input)`;
         $sign="+";
     }
-    else if ($operation == "median")
+    else if ($grpOpInt2 == 3)
     {
         $total=`median($input)`;
         $sign=",";
@@ -146,7 +146,7 @@ global proc calculator(float $input[], string $operation)
     string $resultString;
     for ($i=0; $i<=size($input)-1; $i++)
     {
-        if($operation == "median")
+        if($grpOpInt2 == 3)
         {
             $input= `sort $input`;
         }
@@ -159,7 +159,7 @@ global proc calculator(float $input[], string $operation)
             $resultString += $input[$i] + $sign;
         }
     }
-    if ($operation== "mean")
+    if ($grpOpInt2== 2)
     {
         $resultString+="/"+ size($input)+"="+ $total;
 
@@ -168,7 +168,7 @@ global proc calculator(float $input[], string $operation)
     {
         $resultString+="="+ $total;
     }
-    print($resultString);
+    print($resultString+"\n");
 }
 global proc Calc_buttonCommand()
 {
@@ -180,7 +180,9 @@ global proc Calc_buttonCommand()
     string $arrayname4= `optionVar -q "numArray4"`;
     string $arrayname5= `optionVar -q "numArray5"`;
     string $arrayname6= `optionVar -q "numArray6"`;
-    string $opname= `optionVar -q "Operation"`;
+    string $grpOp= `optionVar -q "grpOperation"`;
+    string $grpOp2= `optionVar -q "grpOperation2"`;
+    
 
     //gets the value of the names saved earlier
     int $intlen= `intField -q -value $intLengthName`;
@@ -190,17 +192,20 @@ global proc Calc_buttonCommand()
     float $array4= `floatField -q -value $arrayname4`;
     float $array5= `floatField -q -value $arrayname5`;
     float $array6= `floatField -q -value $arrayname6`;
-    string $operation= `textField -q -text $opname`;
+    int $grpOpInt= `radioButtonGrp -q -select $grpOp`;
+    int $grpOpInt2= `radioButtonGrp -q -select $grpOp2`;
+    print($grpOpInt);
+    print($grpOpInt2);
     //puts number inputs into an array
     float $list[]={$array1,$array2,$array3,$array4,$array5,$array6};
     float $input[];
-    //puts the input length specified eariler into the imput array
+    //puts the input length specified eariler into the input array
     for($i=0;$i<$intlen;$i++)
     {
         $input[size($input)]=$list[$i];
     }
     //calls function
-    calculator($input, $operation);
+    calculator($input, $grpOpInt, $grpOpInt2);
 }
 //the power operation only takes two numbers
 global proc calcUI()
@@ -222,8 +227,10 @@ global proc calcUI()
     optionVar -stringValue "numArray4" `floatField -parent $mColumn`;
     optionVar -stringValue "numArray5" `floatField -parent $mColumn`;
     optionVar -stringValue "numArray6" `floatField -parent $mColumn`;
-    text -l "Operation name (no capitals)";
-    optionVar -stringValue "Operation" `textField -parent $mColumn`;
+    //seletion for operation
+
+    optionVar -stringValue "grpOperation" `radioButtonGrp -parent $mColumn -numberOfRadioButtons 4 -labelArray4 "sum" "difference" "multiplication" "division"`;
+    optionVar -stringValue "grpOperation2" `radioButtonGrp -parent $mColumn -numberOfRadioButtons 3 -labelArray3 "power" "mean" "median"`;
     button -parent $mColumn -label "Calculate" -command "Calc_buttonCommand";
     showWindow $mWindow;
 }
